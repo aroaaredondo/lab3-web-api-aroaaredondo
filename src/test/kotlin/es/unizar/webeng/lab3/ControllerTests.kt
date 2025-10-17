@@ -93,6 +93,10 @@ class ControllerTests {
         verify(exactly = 2) {
             employeeRepository.save(any<Employee>())
         }
+        verify(exactly = 0) {
+            employeeRepository.findById(any())
+            employeeRepository.deleteById(any())
+        }
     }
 
     @Test
