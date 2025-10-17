@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import java.util.Optional
 
 private val MANAGER_REQUEST_BODY = { name: String ->
     """
@@ -99,7 +100,17 @@ class ControllerTests {
         // Hint: GET is safe and idempotent - it only reads data without side effects.
         // Look at the test expectations to understand what scenarios you need to mock.
         // Consider both successful and unsuccessful retrieval cases.
-        TODO("Complete the mock setup for GET test")
+        every{
+            employeeRepository.findById(1)
+        } answers {
+            Optional.of(Employee("Mary", "Manager", 1))
+        }
+
+        every {
+            employeeRepository.findById(2)
+        } answers {
+            Optional.empty()
+        }
 
         mvc.get("/employees/1").andExpect {
             status { isOk() }
@@ -124,7 +135,19 @@ class ControllerTests {
         // VERIFY - COMPLETE ME!
         // Hint: Since GET is safe, what repository methods should NOT be called?
         // Count how many times each method was called based on the test requests.
-        TODO("Complete the verification for GET test")
+        verify(exactly = 0) {
+            employeeRepository.save(any<Employee>())
+            employeeRepository.deleteById(any())
+            employeeRepository.findAll()
+        }
+
+        verify(exactly = 2) {
+            employeeRepository.findById(1)
+        }
+
+        verify(exactly = 1) {
+            employeeRepository.findById(2)
+        }
     }
 
     @Test
