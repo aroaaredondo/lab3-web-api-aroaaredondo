@@ -2,6 +2,7 @@ package es.unizar.webeng.lab3
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -212,7 +213,9 @@ class ControllerTests {
         // Hint: DELETE is idempotent but not safe - it modifies state but repeated calls have the same effect.
         // Look at the controller implementation to see what repository method it calls.
         // Consider how to mock a method that doesn't return a value.
-        TODO("Complete the mock setup for DELETE test")
+        justRun {
+            employeeRepository.deleteById(1)
+        }
         mvc.delete("/employees/1").andExpect {
             status { isNoContent() }
         }
@@ -224,6 +227,13 @@ class ControllerTests {
         // VERIFY
         // Hint: What repository methods should be called for DELETE operations?
         // What methods should NOT be called? Think about the nature of DELETE operations.
-        TODO("Complete the verification for DELETE test")
+        verify(exactly = 2) {
+            employeeRepository.deleteById(1)
+        }
+        verify(exactly = 0) {
+            employeeRepository.save(any<Employee>())
+            employeeRepository.findById(any())
+            employeeRepository.findAll()
+        }
     }
 }
