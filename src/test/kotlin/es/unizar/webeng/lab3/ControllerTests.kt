@@ -51,7 +51,7 @@ class ControllerTests {
         // Hint: POST is not idempotent - each call creates a new resource.
         // Think about what the controller does when saving an employee.
         // Consider how to mock the repository to return different results for multiple calls.
-        every{
+        every {
             employeeRepository.save(any<Employee>())
         } answers {
             Employee("Mary", "Manager", 1)
@@ -101,7 +101,7 @@ class ControllerTests {
         // Hint: GET is safe and idempotent - it only reads data without side effects.
         // Look at the test expectations to understand what scenarios you need to mock.
         // Consider both successful and unsuccessful retrieval cases.
-        every{
+        every {
             employeeRepository.findById(1)
         } answers {
             Optional.of(Employee("Mary", "Manager", 1))
@@ -165,7 +165,7 @@ class ControllerTests {
             Optional.of(Employee("Mary", "Manager", 1))
         }
 
-        every{
+        every {
             employeeRepository.save(any<Employee>())
         } answers {
             Employee("Mary", "Manager", 1)
@@ -202,7 +202,7 @@ class ControllerTests {
         // VERIFY - COMPLETE ME!
         // Hint: What repository methods should be called for PUT operations?
         // Think about the controller logic and how many times each method should be invoked.
-        verify (exactly = 2) {
+        verify(exactly = 2) {
             employeeRepository.save(any<Employee>())
         }
     }
