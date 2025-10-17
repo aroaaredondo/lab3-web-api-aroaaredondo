@@ -156,7 +156,19 @@ class ControllerTests {
         // Hint: PUT is idempotent but not safe - it modifies state but repeated calls have the same effect.
         // Study the controller logic to understand what it does when an employee exists vs. doesn't exist.
         // Consider how to mock the repository to simulate both scenarios.
-        TODO("Complete the mock setup for PUT test")
+        every {
+            employeeRepository.findById(1)
+        } answers {
+            Optional.empty()
+        } andThenAnswer {
+            Optional.of(Employee("Mary", "Manager", 1))
+        }
+
+        every{
+            employeeRepository.save(any<Employee>())
+        } answers {
+            Employee("Mary", "Manager", 1)
+        }
 
         mvc
             .put("/employees/1") {
@@ -189,7 +201,9 @@ class ControllerTests {
         // VERIFY - COMPLETE ME!
         // Hint: What repository methods should be called for PUT operations?
         // Think about the controller logic and how many times each method should be invoked.
-        TODO("Complete the verification for PUT test")
+        verify (exactly = 2) {
+            employeeRepository.save(any<Employee>())
+        }
     }
 
     @Test
